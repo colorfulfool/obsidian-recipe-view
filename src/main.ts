@@ -6,6 +6,7 @@ import { WHISK_SVG } from './whisk';
 
 interface RecipeViewPluginSettings {
 	sideColumnRegex: string;
+	unitRegex: string;
 	treatH1AsFilename: boolean;
 	renderUnicodeFractions: boolean;
 	singleColumnMaxWidth: number;
@@ -14,6 +15,7 @@ interface RecipeViewPluginSettings {
 
 const DEFAULT_SETTINGS: RecipeViewPluginSettings = {
 	sideColumnRegex: 'Ingredients|Nutrition',
+	unitRegex: 'tb?sp?s?\.?|tablespoons?|teaspoons?|k?g|(kilo)?grams?|cups?|m?Ls?|millilit(re|er)s?|lit(re|er)s?|(fl.?|fluid)?\s+(oz\.?|ounces?)|pounds?|lbs?\.?|sticks?',
 	treatH1AsFilename: false,
 	renderUnicodeFractions: true,
 	singleColumnMaxWidth: 600,
@@ -121,6 +123,17 @@ class RecipeViewSettingsTab extends PluginSettingTab {
 				.setValue(this.plugin.settings!.sideColumnRegex)
 				.onChange(async (value) => {
 					this.plugin.settings!.sideColumnRegex = value;
+					await this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+			.setName('Units regex')
+			.setDesc('A regular expression for units of quantities of ingredients')
+			.addText(text => text
+				.setPlaceholder('tsp|tbsp|g')
+				.setValue(this.plugin.settings!.unitRegex)
+				.onChange(async (value) => {
+					this.plugin.settings!.unitRegex = value;
 					await this.plugin.saveSettings();
 				}));
 

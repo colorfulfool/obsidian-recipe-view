@@ -30,7 +30,7 @@ export interface ParsedRecipe {
     qtyScaleStore: Writable<Fraction>;
 }
 
-function parseForQty(n: Node, qtyScaleStore: Writable<Fraction>) {
+function parseForQty(plugin: RecipeViewPlugin, n: Node, qtyScaleStore: Writable<Fraction>) {
     if (n.nodeType == Node.ELEMENT_NODE) {
         if (
             (n as HTMLElement).hasAttribute("data-qty") ||
@@ -44,7 +44,7 @@ function parseForQty(n: Node, qtyScaleStore: Writable<Fraction>) {
         const parent = n.parentNode!;
         let currentIndex = 0;
         n.textContent = n.textContent!.normalize("NFKD").replaceAll("\u2044", "/");
-        for (const match of matchQuantities(n.textContent!)) {
+        for (const match of matchQuantities(n.textContent!, plugin.settings.unitRegex)) {
             parent.insertBefore(
                 document.createTextNode(
                     n.textContent!.slice(currentIndex, match.index)
@@ -74,33 +74,33 @@ function parseForQty(n: Node, qtyScaleStore: Writable<Fraction>) {
 
     if (n.hasChildNodes()) {
         Array.from(n.childNodes).forEach((c) =>
-            parseForQty(c, qtyScaleStore)
+            parseForQty(plugin, c, qtyScaleStore)
         );
     }
 }
 
-function injectQuantities(parsedRecipe: ParsedRecipe) {
+function injectQuantities(plugin: RecipeViewPlugin, parsedRecipe: ParsedRecipe) {
     parsedRecipe.sections.flatMap((s) => s.sideComponents.concat(s.mainComponents)).map((c) => {
         switch (c.type) {
             case RecipeLeaf:
                 Array.from((c.props.childNodesOf as HTMLElement).querySelectorAll("[data-qty-parse]"))
-                    .forEach((n) => parseForQty(n, parsedRecipe.qtyScaleStore));
+                    .forEach((n) => parseForQty(plugin, n, parsedRecipe.qtyScaleStore));
                 break;
 
             case SelectableStepList:
                 if (c.props.kind == "ol") {
                     Array.from((c.props.list as HTMLElement).querySelectorAll("[data-qty-parse]"))
-                        .forEach((n) => parseForQty(n, parsedRecipe.qtyScaleStore));
+                        .forEach((n) => parseForQty(plugin, n, parsedRecipe.qtyScaleStore));
                 } else {
                     (c.props.list as Array<HTMLElement>).forEach((p) => {
                         Array.from(p.querySelectorAll("[data-qty-parse]"))
-                            .forEach((n) => parseForQty(n, parsedRecipe.qtyScaleStore));
+                            .forEach((n) => parseForQty(plugin, n, parsedRecipe.qtyScaleStore));
                     })
                 }
                 break;
 
             case CheckableIngredientList:
-                parseForQty((c.props.list as HTMLElement), parsedRecipe.qtyScaleStore);
+                parseForQty(plugin, (c.props.list as HTMLElement), parsedRecipe.qtyScaleStore);
                 break;
 
             default:
@@ -282,7 +282,7 @@ export function parseRecipeMarkdown(
         });
     }
 
-    injectQuantities(result);
+    injectQuantities(plugin, result);
 
     return result;
 }
