@@ -1,5 +1,7 @@
 import Fraction from "fraction.js";
 
+export const DEFAULT_UNIT = 'tb?sp?s?\.?|tablespoons?|teaspoons?|k?g|(kilo)?grams?|cups?|m?Ls?|millilit(re|er)s?|lit(re|er)s?|(fl.?|fluid)?\s+(oz\.?|ounces?)|pounds?|lbs?\.?|sticks?';
+
 /** Matches numbers of the forms e.g. 1, 1.5, 1/2, 3 1/2, 5-3/4 */
 export const NUMBER = new RegExp(/\d+(([\s-]+\d+)?\/\d+|\.\d+)?/)
 

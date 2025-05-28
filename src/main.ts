@@ -1,4 +1,5 @@
 import { App, Plugin, PluginSettingTab, Setting, WorkspaceLeaf, addIcon } from 'obsidian';
+import { DEFAULT_UNIT } from './quantities';
 
 import { RecipeView, VIEW_TYPE_RECIPE } from './recipe-view';
 import store from './store';
@@ -13,9 +14,9 @@ interface RecipeViewPluginSettings {
 	showBulletsTwoColumn: boolean;
 }
 
-const DEFAULT_SETTINGS: RecipeViewPluginSettings = {
+export const DEFAULT_SETTINGS: RecipeViewPluginSettings = {
 	sideColumnRegex: 'Ingredients|Nutrition',
-	unitRegex: 'tb?sp?s?\.?|tablespoons?|teaspoons?|k?g|(kilo)?grams?|cups?|m?Ls?|millilit(re|er)s?|lit(re|er)s?|(fl.?|fluid)?\s+(oz\.?|ounces?)|pounds?|lbs?\.?|sticks?',
+	unitRegex: DEFAULT_UNIT,
 	treatH1AsFilename: false,
 	renderUnicodeFractions: true,
 	singleColumnMaxWidth: 600,
