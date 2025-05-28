@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 import Fraction from "fraction.js";
-import { reUnicodeFractions, matchQuantities, QtyFormatType, formatQuantity } from './quantities'
+import { reUnicodeFractions, matchQuantities, QtyFormatType, formatQuantity, DEFAULT_UNIT } from './quantities'
 
 describe('re-unicoding fractions', () => {
     test('converts a lone fraction', () => {
@@ -22,9 +22,11 @@ describe('re-unicoding fractions', () => {
     });
 });
 
+const defaultUnitRegex = DEFAULT_UNIT;
+
 describe('matching single quantities in strings', () => {
     test('matches a decimal number', () => {
-        expect(matchQuantities("2.67"))
+        expect(matchQuantities("2.67", defaultUnitRegex))
             .toStrictEqual([{
                 index: 0,
                 length: 4,
@@ -33,7 +35,7 @@ describe('matching single quantities in strings', () => {
             }]);
     });
     test('matches a fraction', () => {
-        expect(matchQuantities("3/4"))
+        expect(matchQuantities("3/4", defaultUnitRegex))
             .toStrictEqual([{
                 index: 0,
                 length: 3,
@@ -42,7 +44,7 @@ describe('matching single quantities in strings', () => {
             }]);
     });
     test('matches integer with unit', () => {
-        expect(matchQuantities("xxx 200g"))
+        expect(matchQuantities("xxx 200g", defaultUnitRegex))
             .toStrictEqual([{
                 index: 4,
                 length: 4,
@@ -51,7 +53,7 @@ describe('matching single quantities in strings', () => {
             }]);
     });
     test('unit at start is retained', () => {
-        expect(matchQuantities("200g of flour"))
+        expect(matchQuantities("200g of flour", defaultUnitRegex))
             .toStrictEqual([{
                 index: 0,
                 length: 4,
@@ -60,7 +62,7 @@ describe('matching single quantities in strings', () => {
             }]);
     });
     test('matches integer at start', () => {
-        expect(matchQuantities("12 eggs"))
+        expect(matchQuantities("12 eggs", defaultUnitRegex))
             .toStrictEqual([{
                 index: 0,
                 length: 2,
@@ -69,7 +71,7 @@ describe('matching single quantities in strings', () => {
             }]);
     });
     test('matches ASCII fraction with unit', () => {
-        expect(matchQuantities("xxx 1/2 cup"))
+        expect(matchQuantities("xxx 1/2 cup", defaultUnitRegex))
             .toStrictEqual([{
                 index: 4,
                 length: 7,
@@ -78,7 +80,7 @@ describe('matching single quantities in strings', () => {
             }]);
     });
     test('matches ASCII fraction at start', () => {
-        expect(matchQuantities("3/16 sprig"))
+        expect(matchQuantities("3/16 sprig", defaultUnitRegex))
             .toStrictEqual([{
                 index: 0,
                 length: 4,
@@ -87,7 +89,7 @@ describe('matching single quantities in strings', () => {
             }]);
     });
     test('matches normalised Unicode fraction with unit', () => {
-        expect(matchQuantities("xxx \u00BD lb".normalize("NFKD").replace("\u2044", "/")))
+        expect(matchQuantities("xxx \u00BD lb".normalize("NFKD").replace("\u2044", "/"), defaultUnitRegex))
             .toStrictEqual([{
                 index: 4,
                 length: 6,
@@ -96,7 +98,7 @@ describe('matching single quantities in strings', () => {
             }]);
     });
     test('matches normalised Unicode fraction at start', () => {
-        expect(matchQuantities("\u2075\u2044\u2086 bunch".normalize("NFKD").replace("\u2044", "/")))
+        expect(matchQuantities("\u2075\u2044\u2086 bunch".normalize("NFKD").replace("\u2044", "/"), defaultUnitRegex))
             .toStrictEqual([{
                 index: 0,
                 length: 3,
@@ -105,7 +107,7 @@ describe('matching single quantities in strings', () => {
             }]);
     });
     test('matches decimal with unit', () => {
-        expect(matchQuantities("xxx 3.5L"))
+        expect(matchQuantities("xxx 3.5L", defaultUnitRegex))
             .toStrictEqual([{
                 index: 4,
                 length: 4,
@@ -114,7 +116,7 @@ describe('matching single quantities in strings', () => {
             }]);
     });
     test('matches decimal at start', () => {
-        expect(matchQuantities("1.92 something"))
+        expect(matchQuantities("1.92 something", defaultUnitRegex))
             .toStrictEqual([{
                 index: 0,
                 length: 4,
@@ -123,7 +125,7 @@ describe('matching single quantities in strings', () => {
             }]);
     });
     test('matches mixed ASCII number with space with unit', () => {
-        expect(matchQuantities("xxx 2 3/4 tablespoons"))
+        expect(matchQuantities("xxx 2 3/4 tablespoons", defaultUnitRegex))
             .toStrictEqual([{
                 index: 4,
                 length: 17,
@@ -132,7 +134,7 @@ describe('matching single quantities in strings', () => {
             }]);
     });
     test('matches mixed ASCII number with space at start', () => {
-        expect(matchQuantities("10 3/8 unitless"))
+        expect(matchQuantities("10 3/8 unitless", defaultUnitRegex))
             .toStrictEqual([{
                 index: 0,
                 length: 6,
@@ -141,7 +143,7 @@ describe('matching single quantities in strings', () => {
             }]);
     });
     test('matches mixed ASCII number with dash with unit', () => {
-        expect(matchQuantities("xxx 2-3/4 tablespoons"))
+        expect(matchQuantities("xxx 2-3/4 tablespoons", defaultUnitRegex))
             .toStrictEqual([{
                 index: 4,
                 length: 17,
@@ -150,7 +152,7 @@ describe('matching single quantities in strings', () => {
             }]);
     });
     test('matches mixed ASCII number with dash at start', () => {
-        expect(matchQuantities("10-3/8 unitless"))
+        expect(matchQuantities("10-3/8 unitless", defaultUnitRegex))
             .toStrictEqual([{
                 index: 0,
                 length: 6,
@@ -159,7 +161,7 @@ describe('matching single quantities in strings', () => {
             }]);
     });
     test('matches mixed Unicode number with space with unit', () => {
-        expect(matchQuantities("xxx 2 \u00BE tablespoons".normalize("NFKD").replace("\u2044", "/")))
+        expect(matchQuantities("xxx 2 \u00BE tablespoons".normalize("NFKD").replace("\u2044", "/"), defaultUnitRegex))
             .toStrictEqual([{
                 index: 4,
                 length: 17,
@@ -168,7 +170,7 @@ describe('matching single quantities in strings', () => {
             }]);
     });
     test('matches mixed Unicode number with space at start', () => {
-        expect(matchQuantities("10 \u215C unitless".normalize("NFKD").replace("\u2044", "/")))
+        expect(matchQuantities("10 \u215C unitless".normalize("NFKD").replace("\u2044", "/"), defaultUnitRegex))
             .toStrictEqual([{
                 index: 0,
                 length: 6,
@@ -177,7 +179,7 @@ describe('matching single quantities in strings', () => {
             }]);
     });
     test('matches mixed Unicode number with dash with unit', () => {
-        expect(matchQuantities("xxx 2-\u00BE tablespoons".normalize("NFKD").replace("\u2044", "/")))
+        expect(matchQuantities("xxx 2-\u00BE tablespoons".normalize("NFKD").replace("\u2044", "/"), defaultUnitRegex))
             .toStrictEqual([{
                 index: 4,
                 length: 17,
@@ -186,7 +188,7 @@ describe('matching single quantities in strings', () => {
             }]);
     });
     test('matches mixed Unicode number with dash at start', () => {
-        expect(matchQuantities("10-\u215C unitless".normalize("NFKD").replace("\u2044", "/")))
+        expect(matchQuantities("10-\u215C unitless".normalize("NFKD").replace("\u2044", "/"), defaultUnitRegex))
             .toStrictEqual([{
                 index: 0,
                 length: 6,
@@ -199,7 +201,7 @@ describe('matching single quantities in strings', () => {
 describe('matching multiple quantities in strings', () => {
     test('decimal and fraction together', () => {
         // https://github.com/lachholden/obsidian-recipe-view/issues/20
-        expect(matchQuantities("1.5 g (¼ tsp) vanilla paste".normalize("NFKD").replace("\u2044", "/")))
+        expect(matchQuantities("1.5 g (¼ tsp) vanilla paste".normalize("NFKD").replace("\u2044", "/"), defaultUnitRegex))
             .toStrictEqual([
                 {
                     index: 0,
