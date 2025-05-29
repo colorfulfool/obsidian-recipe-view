@@ -42,7 +42,7 @@
 				<label>
 					<input type="radio" name={radioName} />
 					<div class="leaf">
-						<RecipeLeaf childNodesOf={p} asTag="span" />
+						<RecipeLeaf childNodesOf={p} asTag="div" />
 					</div>
 				</label>
 			</p>
