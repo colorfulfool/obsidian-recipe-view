@@ -52,6 +52,15 @@ describe('matching single quantities in strings', () => {
                 unit: "g",
             }]);
     });
+    test('matches integer with unit, using custom regex', () => {
+        expect(matchQuantities("цукини 200г", 'г'))
+            .toStrictEqual([{
+                index: 7,
+                length: 4,
+                value: { value: new Fraction(200, 1), format: QtyFormatType.DECIMAL },
+                unit: "г",
+            }]);
+    });
     test('unit at start is retained', () => {
         expect(matchQuantities("200g of flour", defaultUnitRegex))
             .toStrictEqual([{
