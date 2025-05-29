@@ -25,6 +25,6 @@
 	});
 </script>
 
-<div>
+<span>
 	<svelte:element this={asTag} bind:this={root} class="recipe-leaf" />
-</div>
+</span>

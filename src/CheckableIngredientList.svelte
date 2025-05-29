@@ -38,9 +38,9 @@
 						checked={isChecked(i)}
 						on:change={(e) => changeChecked(i, e)}
 					/>
-					<div class="leaf">
-						<RecipeLeaf childNodesOf={itemAt(i)} asTag="div" />
-					</div>
+					<span class="leaf">
+						<RecipeLeaf childNodesOf={itemAt(i)} asTag="span" />
+					</span>
 				</label>
 			</li>
 		{/each}

@@ -26,9 +26,9 @@
 				<li>
 					<label>
 						<input type="radio" name={radioName} />
-						<div class="leaf">
-							<RecipeLeaf childNodesOf={olChild(i)} asTag="div" />
-						</div>
+						<span class="leaf">
+							<RecipeLeaf childNodesOf={olChild(i)} asTag="span" />
+						</span>
 					</label>
 				</li>
 			{/each}
@@ -42,7 +42,7 @@
 				<label>
 					<input type="radio" name={radioName} />
 					<div class="leaf">
-						<RecipeLeaf childNodesOf={p} asTag="div" />
+						<RecipeLeaf childNodesOf={p} asTag="span" />
 					</div>
 				</label>
 			</p>
