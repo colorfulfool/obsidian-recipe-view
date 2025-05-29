@@ -1,6 +1,6 @@
 import Fraction from "fraction.js";
 
-export const DEFAULT_UNIT = 'tb?sp?s?\.?|tablespoons?|teaspoons?|k?g|(kilo)?grams?|cups?|m?Ls?|millilit(re|er)s?|lit(re|er)s?|(fl.?|fluid)?\s+(oz\.?|ounces?)|pounds?|lbs?\.?|sticks?';
+export const DEFAULT_UNIT = "tb?sp?s?\\.?|tablespoons?|teaspoons?|k?g|(kilo)?grams?|cups?|m?Ls?|millilit(re|er)s?|lit(re|er)s?|(fl.?|fluid)?\\s+(oz\\.?|ounces?)|pounds?|lbs?\\.?|sticks?";
 
 export enum QtyFormatType {
     FRACTION,
