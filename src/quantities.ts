@@ -68,9 +68,9 @@ function quantityStringsToValue(str: string, unit?: string) {
 export function matchQuantities(str: string, unitRegex: string) {
 	const NUMBER = new RegExp(/\d+(([\s-]+\d+)?\/\d+|\.\d+)?/)
     const UNIT = new RegExp(unitRegex, "i");
-    const NUMBER_WITH_UNIT = new RegExp("(?<number>" + NUMBER.source + ")\\s*(?<unit>" + UNIT.source + ")\\b", "ig");
+    const NUMBER_WITH_UNIT = new RegExp("(?<number>" + NUMBER.source + ")\\s*(?<unit>" + UNIT.source + ")(?!\\p{L})", "igu");
 	const START_NUMBER_ALONE = new RegExp("(?<startnumber>^" + NUMBER.source + ")\\b", "ig");
-    const QUANTITY = new RegExp(NUMBER_WITH_UNIT.source + "|" + START_NUMBER_ALONE.source, "ig");
+    const QUANTITY = new RegExp(NUMBER_WITH_UNIT.source + "|" + START_NUMBER_ALONE.source, "igu");
 
     return Array.from(str.matchAll(QUANTITY)).map((match) => {
         return {
