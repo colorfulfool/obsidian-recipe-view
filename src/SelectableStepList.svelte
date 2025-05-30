@@ -38,12 +38,10 @@
 	<!-- means steps is an array of P elements -->
 	{#each pList() as p}
 		<div class="leaf">
-			<p>
-				<label>
-					<input type="radio" name={radioName} />
-					<RecipeLeaf childNodesOf={p} asTag="span" />
-				</label>
-			</p>
+			<label>
+				<input type="radio" name={radioName} />
+				<RecipeLeaf childNodesOf={p} asTag="span" />
+			</label>
 		</div>
 	{/each}
 {/if}
