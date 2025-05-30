@@ -29,19 +29,19 @@
 	<ul class:bullets>
 		{#each list.children as _, i}
 			<li>
-				<label>
-					<!-- Persist checkbox state on component re-construction by setting
-				data-checked on the underlying LI element from the rendered markdown.
-				-->
+				<div class="leaf">
+					<label>
+						<!-- Persist checkbox state on component re-construction by setting
+					data-checked on the underlying LI element from the rendered markdown.
+					-->
 					<input
 						type="checkbox"
 						checked={isChecked(i)}
 						on:change={(e) => changeChecked(i, e)}
 					/>
-					<span class="leaf">
 						<RecipeLeaf childNodesOf={itemAt(i)} asTag="span" />
-					</span>
-				</label>
+					</label>
+				</div>
 			</li>
 		{/each}
 	</ul>
@@ -63,12 +63,12 @@
 		position: relative;
 	}
 
-	input[type="checkbox"]:checked ~ .leaf {
+	.leaf:has(input[type="checkbox"]:checked) {
 		color: var(--text-muted);
 		text-decoration: line-through;
 	}
 
-	input[type="checkbox"]:focus ~ .leaf {
+	.leaf:has(input[type="checkbox"]:focus) {
 		color: var(--text-accent-hover);
 	}
 

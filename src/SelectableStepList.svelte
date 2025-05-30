@@ -24,12 +24,12 @@
 		<ol class="recipe-mutex-select">
 			{#each olChildren() as _, i}
 				<li>
-					<label>
-						<input type="radio" name={radioName} />
-						<span class="leaf">
+					<div class="leaf">
+						<label>
+							<input type="radio" name={radioName} />
 							<RecipeLeaf childNodesOf={olChild(i)} asTag="span" />
-						</span>
-					</label>
+						</label>
+					</div>
 				</li>
 			{/each}
 		</ol>
@@ -37,13 +37,11 @@
 {:else if kind == "p"}
 	<!-- means steps is an array of P elements -->
 	{#each pList() as p}
-		<div>
+		<div class="leaf">
 			<p>
 				<label>
 					<input type="radio" name={radioName} />
-					<span class="leaf">
-						<RecipeLeaf childNodesOf={p} asTag="span" />
-					</span>
+					<RecipeLeaf childNodesOf={p} asTag="span" />
 				</label>
 			</p>
 		</div>
@@ -83,7 +81,7 @@
 		margin-inline-start: calc(-1 * var(--list-indent));
 	}
 
-	input[type="radio"]:checked ~ .leaf {
+	.leaf:has(input[type="radio"]:checked) {
 		background-color: hsla(
 			var(--accent-h),
 			var(--accent-s),
@@ -92,7 +90,7 @@
 		);
 	}
 
-	input[type="radio"]:focus ~ .leaf {
+	.leaf:has(input[type="radio"]:focus) {
 		box-shadow: inset 0px 0px 0px var(--border-width)
 			var(--interactive-accent);
 	}
