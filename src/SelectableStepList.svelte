@@ -40,7 +40,7 @@
 		<div class="leaf">
 			<label>
 				<input type="radio" name={radioName} />
-				<RecipeLeaf childNodesOf={p} asTag="span" />
+				<RecipeLeaf childNodesOf={p} asTag="p" />
 			</label>
 		</div>
 	{/each}
@@ -59,6 +59,7 @@
 		margin: 0;
 		padding: 0;
 		z-index: -1;
+		display: none; /* otherwise the p branch above looks broken is Safari */
 	}
 
 	label {
