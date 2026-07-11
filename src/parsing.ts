@@ -25,6 +25,7 @@ export interface ParsedRecipeSection {
 export interface ParsedRecipe {
     title: string;
     thumbnailPath: string;
+    servings: number;
     sections: Array<ParsedRecipeSection>;
     renderedMarkdownParent: HTMLElement;
     qtyScaleStore: Writable<Fraction>;
@@ -121,6 +122,7 @@ export function parseRecipeMarkdown(
     const result: ParsedRecipe = {
         title: "",
         thumbnailPath: "",
+        servings: 1,
         sections: [{
             containsHeader: false,
             sideComponents: [],
@@ -189,6 +191,16 @@ export function parseRecipeMarkdown(
         // get rid of the display: none frontmatter
         if (item.matches("pre.frontmatter")) {
             continue;
+        }
+
+        // Detect **Servings**: N and extract the number
+        if (item.nodeName == "P") {
+            const text = item.textContent || "";
+            const servingsMatch = text.match(/^\s*\*?\*?Servings\*?\*?\s*:\s*(\d+)\s*$/);
+            if (servingsMatch) {
+                result.servings = parseInt(servingsMatch[1]);
+                continue;
+            }
         }
 
         // Extract the first image as a thumbnail

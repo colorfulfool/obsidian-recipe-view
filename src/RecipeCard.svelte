@@ -21,7 +21,7 @@
 	export let view: RecipeView;
 
 	// Recipe scaling - create store here to pass to all children via ctx
-	let scaleNum = 1;
+	let scaleNum = parsedRecipe?.servings || 1;
 	let qtyScale: Fraction;
 	$: parsedRecipe?.qtyScaleStore.set(qtyScale);
 
